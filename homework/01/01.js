@@ -18,7 +18,7 @@ app.use((ctx) => {
   console.log('ctx.request.url=', ctx.request.url)
   let pathname = ctx.request.url.pathname
 
-  if (ctx.request.url.pathname=="/nqu/csie") {
+  if (pathname.startsWith("/nqu/csie/")) { //(ctx.request.url.pathname=="/nqu/csie")
     ctx.response.body = page(`
     <a href="https://csie.nqu.edu.tw//">金門大學資工系</a>
     `)
@@ -46,7 +46,7 @@ app.use((ctx) => {
       <p>/to/nqu/csie/ 轉到金門大學資工系</p>
     `)
   }
-  // searchParams.get('name')=${ctx.request.url.searchParams.get('name')}
+
 });
 
 console.log('start at : http://127.0.0.1:8000')
