@@ -1,24 +1,8 @@
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
 
-const nqu = new Map();
-nqu.set("01", {
-    href:"https://www.nqu.edu.tw/">金門大學
-});
-nqu.set("02", {
-    href:"https://csie.nqu.edu.tw//">金門大學資工系
-});
-
-const to = new Map();
-to.set("11", {
-    ctx:response.redirect('https://csie.nqu.edu.tw//')
-});
-to.set("12", {
-    ctx:response.redirect('https://csie.nqu.edu.tw//')
-});
-
 const room = new Map();
 room.set("e320", {
-  title: "多媒體教室",
+  room: "多媒體教室",
 });
 room.set("e319", {
   room: "嵌入式實驗室",
@@ -26,30 +10,34 @@ room.set("e319", {
 
 const router = new Router();
 router
-  .get("/", (context) => {
-    context.response.body = "/nqu/01  顯示金門大學超連結";
-    context.response.body = "/nqu/02 顯示金門大學資工系超連結";
-    context.response.body = "/to/11 轉到金門大學網站!";
-    context.response.body = "/to/12 轉到金門大學資工系";
-    context.response.body = "room/e320 => 多媒體教室";
-    context.response.body = " /room/e319 => 嵌入式實驗室";
+  .get("", (context) => {
+    context.response.body = "/nqu/  顯示金門大學超連結 \n/nqu/csie/ 顯示金門大學資工系超連結 \n/to/nqu/ 轉到金門大學網站 \n/to/nqu/csie/ 轉到金門大學資工系 \n/room/e320 => 多媒體教室 \n/room/e319 => 嵌入式實驗室";
   })
-  .get("/nqu", (context) => {
-    context.response.body = Array.from(nqu.values());
+
+  .get("/nqu/", (context) => {
+    context.response.body = `
+    <html>
+        <body>
+        <a href="https://www.nqu.edu.tw/">金門大學</a>
+        </body>
+    </html>`;
   })
-  .get("/nqu/:id", (context) => {
-    if (context.params && context.params.id && nqu.has(context.params.id)) {
-      context.response.body = nqu.get(context.params.id);
-    }
+  .get("/nqu/cise/", (context) => {
+    context.response.body =`
+    <html>
+        <body>
+    <a href="https://csie.nqu.edu.tw/">金門大學資工系</a>
+        </body>
+    </html>`
   })
-  .get("/to", (context) => {
-    context.response.body = Array.from(to.values());
+
+  .get("/to/nqu/", (context) => {
+    context.response.redirect('https://www.nqu.edu.tw/')
   })
-  .get("/to/:id", (context) => {
-    if (context.params && context.params.id && to.has(context.params.id)) {
-      context.response.body = to.get(context.params.id);
-    }
+  .get("/to/nqu/csie/", (context) => {
+    context.response.redirect('https://csie.nqu.edu.tw/')
   })
+
   .get("/room", (context) => {
     context.response.body = Array.from(room.values());
   })
