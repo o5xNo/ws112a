@@ -23,7 +23,7 @@ router
     </html>
     `
   })
-  .get("/nqu/cise/", (context) => {
+  .get("/nqu/csie/", (context) => {
     context.response.body =`
     <html>
         <body>
