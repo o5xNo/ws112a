@@ -15,20 +15,14 @@ router
   })
 
   .get("/nqu/", (context) => {
-    context.response.body = `
-    <html>
-        <body>
-        <a href="https://www.nqu.edu.tw/">金門大學</a>
-        </body>
-    </html>`;
+    context.response.body = page(`
+    <a href="https://www.nqu.edu.tw/">金門大學</a>
+    `)
   })
   .get("/nqu/cise/", (context) => {
-    context.response.body =`
-    <html>
-        <body>
-    <a href="https://csie.nqu.edu.tw/">金門大學資工系</a>
-        </body>
-    </html>`
+    context.response.body =page(`
+    <a href="https://csie.nqu.edu.tw//">金門大學資工系</a>
+    `)
   })
 
   .get("/to/nqu/", (context) => {
