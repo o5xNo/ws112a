@@ -27,7 +27,7 @@ router
     context.response.body =`
     <html>
         <body>
-            <a href="https://csie.nqu.edu.tw//">金門大學資工系</a>
+            <a href="https://csie.nqu.edu.tw/">金門大學資工系</a>
         </body>
     </html>
     `
