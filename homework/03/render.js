@@ -17,12 +17,12 @@ export function layout(title, content) {
           font-size: 1.2em;
         }
     
-        #people {
+        #posts {
           margin: 0;
           padding: 0;
         }
     
-        #people li {
+        #posts li {
           margin: 40px 0;
           padding: 0;
           padding-bottom: 20px;
@@ -30,7 +30,7 @@ export function layout(title, content) {
           list-style: none;
         }
     
-        #people li:last-child {
+        #posts li:last-child {
           border-bottom: none;
         }
     
@@ -63,13 +63,13 @@ export function layout(title, content) {
     `
   }
   
-  export function list(people) {
+  export function list(posts) {
     let list = []
-    for (let post of people) {
+    for (let post of posts) {
       list.push(`
       <li>
-        <h2>${ person.title }</h2>
-        <p><a href="/post/${person.id}">Read post</a></p>
+        <h2>${ post.title }</h2>
+        <p><a href="/post/${post.id}">Read post</a></p>
       </li>
       `)
     }
@@ -77,7 +77,7 @@ export function layout(title, content) {
     <h1>聯絡人</h1>
     <p>您有<strong>${ppeople.length}</strong> 個聯絡人!</p>
     <p><a href="/post/new">新增聯絡人</a></p>
-    <ul id="people">
+    <ul id="posts">
       ${list.join('\n')}
     </ul>
     `
@@ -96,10 +96,10 @@ export function layout(title, content) {
     `)
   }
   
-  export function show(person) {
-    return layout(person.title, `
-      <h1>${person.title}</h1>
-      <pre>${person.body}</pre>
+  export function show(post) {
+    return layout(post.title, `
+      <h1>${post.title}</h1>
+      <pre>${post.body}</pre>
     `)
   }
   
