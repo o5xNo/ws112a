@@ -66,14 +66,16 @@ router
       }
   }
 })
-  .get("/public/(.*)", async (ctx) => {
-    let wpath = ctx.params[0]
-    console.log('wpath=', wpath)
-    await send(ctx, wpath, {
-      root: Deno.cwd()+"/public/",
-      index: "index.html",
-    })
-  })
+.get("/public/(.*)", async (ctx) => {
+  const wpath = ctx.params[0];
+  console.log('wpath=', wpath);
+  const moduleDir = new URL(import.meta.url).pathname;
+  const modulePath = moduleDir.substring(0, moduleDir.lastIndexOf('/'));
+  await send(ctx, wpath, {
+    root: modulePath + "/public/",
+    index: "index.html",
+  });
+});
 
 const app = new Application();
 
