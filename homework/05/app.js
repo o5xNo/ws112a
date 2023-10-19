@@ -7,10 +7,13 @@ db.query("CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT
 
 const router = new Router();
 
-router.get('/', list)
+router
+  .get('/', list)
   .get('/post/new', add)
   .get('/post/:id', show)
   .post('/post', create)
+  .get('/search', searchForm)
+  .post('/search', search);
 
 const app = new Application();
 app.use(router.routes());
@@ -25,9 +28,9 @@ app.use(async (ctx) => {
   }
 });
 
-function query(sql) {
+function query(sql, params = []) {
   let list = []
-  for (const [id, title, body] of db.query(sql)) {
+  for (const [id, title, body] of db.query(sql, params)) {
     list.push({ id, title, body })
   }
   return list
@@ -44,7 +47,7 @@ async function add(ctx) {
 
 async function show(ctx) {
   const pid = ctx.params.id;
-  let posts = query(`SELECT id, title, body FROM posts WHERE id=${pid}`)
+  let posts = query(`SELECT id, title, body FROM posts WHERE id=?`, [pid])
   let post = posts[0]
   if (!post) ctx.throw(404, 'invalid post id');
   ctx.response.body = await render.show(post);
@@ -60,6 +63,24 @@ async function create(ctx) {
     }
     db.query("INSERT INTO posts (title, body) VALUES (?, ?)", [post.title, post.body]);
     ctx.response.redirect('/');
+  }
+}
+
+function searchForm(ctx) {
+  ctx.response.body = render.searchForm();
+}
+
+async function search(ctx) {
+  const body = ctx.request.body()
+  if (body.type === "form") {
+    const pairs = await body.value
+    const searchName = pairs.get('name');
+    const posts = query("SELECT id, title, body FROM posts WHERE title LIKE ?", [`%${searchName}%`]);
+    if (posts.length > 0) {
+      ctx.response.body = await render.list(posts);
+    } else {
+      ctx.response.body = '查無此人';
+    }
   }
 }
 
