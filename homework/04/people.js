@@ -33,11 +33,11 @@ router
       console.log(`name=${name} ps=${ps}`)
       if (peoples.get(name)) {
         ctx.response.type = 'text/html'
-        ctx.response.body = `<p>此帳號已存在</p><p><a href="http://127.0.0.1:8000/public/add.html">註冊</a></p>`
+        ctx.response.body = `<p>此帳號或密碼已存在</p><p><a href="http://127.0.0.1:8000/public/add.html">註冊</a></p>`
       } else {
         peoples.set(name, {name, ps})
         ctx.response.type = 'text/html'
-        ctx.response.body = `<p>註冊成功</p><p><a href="http://127.0.0.1:8000/public/find.html">登入</a></p>`
+        ctx.response.body = `<p>恭喜你註冊成功</p><p><a href="http://127.0.0.1:8000/public/find.html">登入</a></p>`
       }
   
     }
