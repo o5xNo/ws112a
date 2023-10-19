@@ -24,7 +24,7 @@ app.use(async (ctx) => {
     await send(ctx, ctx.request.url.pathname, {
       root: Deno.cwd(),
       index: "index.html",
-    });  
+    });
   }
 });
 
@@ -71,18 +71,20 @@ function searchForm(ctx) {
 }
 
 async function search(ctx) {
-  const body = ctx.request.body()
-  if (body.type === "form") {
-    const pairs = await body.value
-    const searchName = pairs.get('name');
-    const posts = query("SELECT id, title, body FROM posts WHERE title LIKE ?", [`%${searchName}%`]);
-    if (posts.length > 0) {
-      ctx.response.body = await render.list(posts);
-    } else {
-      ctx.response.body = '查無此人';
+    const body = ctx.request.body()
+    if (body.type === "form") {
+      const pairs = await body.value
+      const searchName = pairs.get('name');
+      const posts = query("SELECT id, title, body FROM posts WHERE title LIKE ?", [`%${searchName}%`]);
+      if (posts.length > 0) {
+        const firstPostId = posts[0].id;
+        ctx.response.redirect(`/post/${firstPostId}`);
+      } else {
+        ctx.response.body = '查無此人';
+      }
     }
   }
-}
+  
 
 console.log('Server run at http://127.0.0.1:8000');
 await app.listen({ port: 8000 });
