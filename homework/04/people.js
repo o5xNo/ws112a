@@ -1,5 +1,5 @@
 import { Application, Router, send } from "https://deno.land/x/oak/mod.ts";
- 
+
 const peoples = new Map();
 peoples.set("isme", {
   name: "isme",
@@ -70,9 +70,9 @@ router
   const wpath = ctx.params[0];
   console.log('wpath=', wpath);
   const moduleDir = new URL(import.meta.url).pathname;
-  const modulePath = moduleDir.substring(0, moduleDir.lastIndexOf('/'));
+  const modulePath = moduleDir.substring(1, moduleDir.lastIndexOf('/'));
   await send(ctx, wpath, {
-    root: modulePath + "/public/",
+    root: modulePath + "\\public\\",
     index: "index.html",
   });
 });
@@ -82,6 +82,6 @@ const app = new Application();
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-console.log('start at : http://127.0.0.1:8000')
+console.log('stare at：http://127.0.0.1:8000');
 
 await app.listen({ port: 8000 });
