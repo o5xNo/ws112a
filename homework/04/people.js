@@ -1,11 +1,11 @@
 import { Application, Router, send } from "https://deno.land/x/oak/mod.ts";
  
 const peoples = new Map();
-peoples.set("john", {
+peoples.set("isme", {
   name: "isme",
   ps: "145214522",
 });
-peoples.set("mary", {
+peoples.set("malala", {
   name: "malala",
   ps: "5186161",
 });
