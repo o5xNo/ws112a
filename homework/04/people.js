@@ -13,7 +13,7 @@ peoples.set("mary", {
 const router = new Router();
 router
   .get("/", (ctx) => {
-    ctx.response.body = ctx.response.redirect('http://127.0.0.1:8000/public/');
+    ctx.response.body = ctx.response.redirect('http://127.0.0.1:8000/public/index.html');
   })
   .get("/people", (ctx) => {
     ctx.response.body = Array.from(peoples.values());
