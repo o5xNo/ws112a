@@ -8,20 +8,20 @@ export function layout(title, content) {
         padding: 80px;
         font: 16px Helvetica, Arial;
       }
-  
+
       h1 {
         font-size: 2em;
       }
-  
+
       h2 {
         font-size: 1.2em;
       }
-  
+
       #posts {
         margin: 0;
         padding: 0;
       }
-  
+
       #posts li {
         margin: 40px 0;
         padding: 0;
@@ -29,16 +29,16 @@ export function layout(title, content) {
         border-bottom: 1px solid #eee;
         list-style: none;
       }
-  
+
       #posts li:last-child {
         border-bottom: none;
       }
-  
+
       textarea {
         width: 500px;
         height: 300px;
       }
-  
+
       input[type=text],
       textarea {
         border: 1px solid #eee;
@@ -48,7 +48,7 @@ export function layout(title, content) {
         padding: 15px;
         font-size: .8em;
       }
-  
+
       input[type=text],input[type=password] {
         width: 500px;
       }
@@ -68,9 +68,9 @@ export function loginUi() {
   <h1>Login</h1>
   <form action="/login" method="post">
     <p><input type="text" placeholder="username" name="username"></p>
-    <p><input type="password" placeholder="password" name="password"></p>
+    <p><input type="password" placeholder="password" name "password"></p>
     <p><input type="submit" value="Login"></p>
-    <p>New user? <a href="/signup">Create an account</p>
+    <p>New user? <a href="/signup">Create an account</a></p>
   </form>
   `)
 }
@@ -133,6 +133,7 @@ export function newPost() {
   </form>
   `);
 }
+
 export function searchForm() {
   return layout('Search', `
     <h1>搜索聯絡人</h1>

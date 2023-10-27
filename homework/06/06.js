@@ -28,10 +28,8 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 function sqlcmd(sql, arg1) {
-  console.log('sql:', sql)
   try {
     var results = db.query(sql, arg1)
-    console.log('sqlcmd: results=', results)
     return results
   } catch (error) {
     console.log('sqlcmd error: ', error)
@@ -42,18 +40,16 @@ function sqlcmd(sql, arg1) {
 function postQuery(sql) {
   let list = []
   for (const [id, username, title, body] of sqlcmd(sql)) {
-    list.push({id, username, title, body})
+    list.push({ id, username, title, body })
   }
-  console.log('postQuery: list=', list)
   return list
 }
 
 function userQuery(sql) {
   let list = []
   for (const [id, username, password, email] of sqlcmd(sql)) {
-    list.push({id, username, password, email})
+    list.push({ id, username, password, email })
   }
-  console.log('userQuery: list=', list)
   return list
 }
 
@@ -95,7 +91,6 @@ async function login(ctx) {
     var dbUser = dbUsers[0]
     if (dbUser.password === user.password) {
       ctx.state.session.set('user', user)
-      console.log('session.user=', await ctx.state.session.get('user'))
       ctx.response.redirect('/');
     } else {
       ctx.response.body = render.fail()
@@ -104,13 +99,12 @@ async function login(ctx) {
 }
 
 async function logout(ctx) {
-   ctx.state.session.set('user', null)
-   ctx.response.redirect('/')
+  ctx.state.session.set('user', null)
+  ctx.response.redirect('/')
 }
 
 async function list(ctx) {
   let posts = postQuery("SELECT id, username, title, body FROM posts")
-  console.log('list:posts=', posts)
   ctx.response.body = await render.list(posts, await ctx.state.session.get('user'));
 }
 
@@ -127,7 +121,6 @@ async function show(ctx) {
   const pid = ctx.params.id;
   let posts = postQuery(`SELECT id, username, title, body FROM posts WHERE id=${pid}`)
   let post = posts[0]
-  console.log('show:post=', post)
   if (!post) ctx.throw(404, 'invalid post id');
   ctx.response.body = await render.show(post);
 }
@@ -136,10 +129,8 @@ async function create(ctx) {
   const body = ctx.request.body()
   if (body.type === "form") {
     var post = await parseFormBody(body)
-    console.log('create:post=', post)
     var user = await ctx.state.session.get('user')
     if (user != null) {
-      console.log('user=', user)
       sqlcmd("INSERT INTO posts (username, title, body) VALUES (?, ?, ?)", [user.username, post.title, post.body]);  
     } else {
       ctx.throw(404, 'not login yet!');
@@ -168,7 +159,7 @@ async function search(ctx) {
       if (result) {
         ctx.response.body = render.show(result.title, result.body);
       } else {
-        ctx.response.body = '查無此人';
+        ctx.response.body = '查无此人';
       }
     }
   } else {
