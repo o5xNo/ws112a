@@ -8,20 +8,20 @@ export function layout(title, content) {
         padding: 80px;
         font: 16px Helvetica, Arial;
       }
-
+  
       h1 {
         font-size: 2em;
       }
-
+  
       h2 {
         font-size: 1.2em;
       }
-
+  
       #posts {
         margin: 0;
         padding: 0;
       }
-
+  
       #posts li {
         margin: 40px 0;
         padding: 0;
@@ -29,17 +29,17 @@ export function layout(title, content) {
         border-bottom: 1px solid #eee;
         list-style: none;
       }
-
+  
       #posts li:last-child {
         border-bottom: none;
       }
-
+  
       textarea {
         width: 500px;
         height: 300px;
       }
-
-      input[type=text],
+  
+      input[type=text],input[type=password],
       textarea {
         border: 1px solid #eee;
         border-top-color: #ddd;
@@ -48,7 +48,7 @@ export function layout(title, content) {
         padding: 15px;
         font-size: .8em;
       }
-
+  
       input[type=text],input[type=password] {
         width: 500px;
       }
@@ -60,66 +60,67 @@ export function layout(title, content) {
     </section>
   </body>
   </html>
-  `;
+  `
 }
 
 export function loginUi() {
   return layout('Login', `
-  <h1>Login</h1>
+  <h1>登入</h1>
   <form action="/login" method="post">
-    <p><input type="text" placeholder="username" name="username"></p>
-    <p><input type="password" placeholder="password" name "password"></p>
-    <p><input type="submit" value="Login"></p>
-    <p>New user? <a href="/signup">Create an account</a></p>
+    <p><input type="text" placeholder="用戶id" name="username"></p>
+    <p><input type="password" placeholder="密碼" name="password"></p>
+    <p><input type="submit" value="登入"></p>
+    <p><a href="/signup">註冊</p>
   </form>
   `)
 }
 
 export function signupUi() {
   return layout('Signup', `
-  <h1>Signup</h1>
+  <h1>註冊</h1>
   <form action="/signup" method="post">
-    <p><input type="text" placeholder="username" name="username"></p>
-    <p><input type="password" placeholder="password" name="password"></p>
+    <p><input type="text" placeholder="用戶id" name="username"></p>
+    <p><input type="password" placeholder="密碼" name="password"></p>
     <p><input type="text" placeholder="email" name="email"></p>
-    <p><input type="submit" value="Signup"></p>
+    <p><input type="submit" value="註冊"></p>
   </form>
   `)
 }
 
 export function success() {
   return layout('Success', `
-  <h1>Success!</h1>
-  You may <a href="/">read all Post</a> / <a href="/login">login</a> again !
+  <h1>恭喜你註冊成功!</h1>
+  你可以 <a href="/">瀏覽資料</a>或<a href="/login">登入</a>
   `)
 }
 
 export function fail() {
   return layout('Fail', `
-  <h1>Fail!</h1>
-  You may <a href="/">read all Post</a> or <a href="JavaScript:window.history.back()">go back</a> !
+  <h1>錯誤</h1>
+  你可以<a href="/">瀏覽資料</a>或<a href="JavaScript:window.history.back()">返回</a> !
   `)
 }
 
 export function list(posts, user) {
-  let listItems = [];
+  console.log('list: user=', user)
+  let list = []
   for (let post of posts) {
-    listItems.push(`
+    list.push(`
     <li>
-      <h2>${post.title}</h2>
-      <p><a href="/post/${post.id}">詳細資料</a></p>
+      <h2>${ post.title } -- by ${post.username}</h2>
+      <p><a href="/post/${post.id}">查看資料</a></p>
     </li>
-    `);
+    `)
   }
   let content = `
-  <h1>聯絡人</h1>
-  <p>${(user == null) ? '<a href="/login">登入</a>以創建聯絡人！' : '歡迎' + user.username + '，您可以<a href="/post/new">新增聯絡</a>或<a href="/logout">查詢</a>！'}</p>
-  <p>共有 <strong>${posts.length}</strong> 篇帖子！</p>
+  <h1>Posts</h1>
+  <p>${(user==null)?'<a href="/login">登入</a>創建資料':'歡迎'+user.username+'，您可以 <a href="/post/new">創建資料</a> or <a href="/logout">登出</a> !'}</p>
+  <p>There are <strong>${posts.length}</strong> posts!</p>
   <ul id="posts">
-    ${listItems.join('\n')}
+    ${list.join('\n')}
   </ul>
-  `;
-  return layout('Posts', content);
+  `
+  return layout('Posts', content)
 }
 
 export function newPost() {
@@ -131,29 +132,12 @@ export function newPost() {
     <p><textarea placeholder="電話" name="body"></textarea></p>
     <p><input type="submit" value="新增"></p>
   </form>
-  `);
+  `)
 }
 
-export function searchForm() {
-  return layout('Search', `
-    <h1>搜索聯絡人</h1>
-    <form action="/search" method="post">
-      <p><input type="text" placeholder="姓名" name="name"></p>
-      <p><input type="submit" value="搜索"></p>
-    </form>
-  `);
-}
-
-export function show(titleOrPost, body) {
-  if (typeof titleOrPost === 'string') {
-    return layout(titleOrPost, `
-      <h1>${titleOrPost}</h1>
-      <p>${body}</p>
-    `);
-  } else if (typeof titleOrPost === 'object' && titleOrPost !== null) {
-    return layout(titleOrPost.title, `
-      <h1>${titleOrPost.title}</h1>
-      <pre>${titleOrPost.body}</pre>
-    `);
-  }
+export function show(post) {
+  return layout(post.title, `
+    <h1>${post.title} -- by ${post.username}</h1>
+    <p>${post.body}</p>
+  `)
 }
