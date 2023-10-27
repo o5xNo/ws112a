@@ -1,12 +1,7 @@
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
-import * as render from './render.js';
 import { DB } from "https://deno.land/x/sqlite/mod.ts";
 import { Session } from "https://deno.land/x/oak_sessions/mod.ts";
-
-const posts = [
-  { id: 0, title: '孫悟空', body: '0909090909' },
-  { id: 1, title: '豬八戒', body: '0988888888' },
-];
+import * as render from './render.js';
 
 const db = new DB("blog.db");
 db.query("CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, title TEXT, body TEXT)");
@@ -27,10 +22,10 @@ router
   .get('/search', searchForm)
   .post('/search', search);
 
-  const app = new Application();
-  app.use(Session.initMiddleware());
-  app.use(router.routes());
-  app.use(router.allowedMethods());
+const app = new Application();
+app.use(Session.initMiddleware());
+app.use(router.routes());
+app.use(router.allowedMethods());
 
 function sqlcmd(sql, arg1) {
   console.log('sql:', sql)
@@ -96,7 +91,7 @@ async function login(ctx) {
   const body = ctx.request.body()
   if (body.type === "form") {
     var user = await parseFormBody(body)
-    var dbUsers = userQuery(`SELECT id, username, password, email FROM users WHERE username='${user.username}'`) // userMap[user.username]
+    var dbUsers = userQuery(`SELECT id, username, password, email FROM users WHERE username='${user.username}'`)
     var dbUser = dbUsers[0]
     if (dbUser.password === user.password) {
       ctx.state.session.set('user', user)
@@ -114,52 +109,70 @@ async function logout(ctx) {
 }
 
 async function list(ctx) {
-  ctx.response.body = await render.list(posts);
+  let posts = postQuery("SELECT id, username, title, body FROM posts")
+  console.log('list:posts=', posts)
+  ctx.response.body = await render.list(posts, await ctx.state.session.get('user'));
 }
 
 async function add(ctx) {
-  const content = await render.newPost() + render.searchForm();
-  ctx.response.body = content;
+  var user = await ctx.state.session.get('user')
+  if (user != null) {
+    ctx.response.body = await render.newPost();
+  } else {
+    ctx.response.body = render.fail()
+  }
 }
 
 async function show(ctx) {
-  const id = ctx.params.id;
-  const post = posts[id];
+  const pid = ctx.params.id;
+  let posts = postQuery(`SELECT id, username, title, body FROM posts WHERE id=${pid}`)
+  let post = posts[0]
+  console.log('show:post=', post)
   if (!post) ctx.throw(404, 'invalid post id');
   ctx.response.body = await render.show(post);
 }
 
 async function create(ctx) {
-  const body = ctx.request.body();
+  const body = ctx.request.body()
   if (body.type === "form") {
-    const pairs = await body.value;
-    const post = {};
-    for (const [key, value] of pairs) {
-      post[key] = value;
+    var post = await parseFormBody(body)
+    console.log('create:post=', post)
+    var user = await ctx.state.session.get('user')
+    if (user != null) {
+      console.log('user=', user)
+      sqlcmd("INSERT INTO posts (username, title, body) VALUES (?, ?, ?)", [user.username, post.title, post.body]);  
+    } else {
+      ctx.throw(404, 'not login yet!');
     }
-    console.log('post=', post);
-    const id = posts.push(post) - 1;
-    post.created_at = new Date();
-    post.id = id;
     ctx.response.redirect('/');
   }
 }
 
-function searchForm(ctx) {
-  ctx.response.body = render.searchForm();
+async function searchForm(ctx) {
+  var user = await ctx.state.session.get('user');
+  if (user != null) {
+    ctx.response.body = await render.searchForm();
+  } else {
+    ctx.response.body = render.fail();
+  }
 }
 
 async function search(ctx) {
-  const body = ctx.request.body();
-  if (body.type === "form") {
-    const pairs = await body.value;
-    const searchName = pairs.get('name');
-    const result = searchByName(searchName);
-    if (result) {
-      ctx.response.body = render.show(result.title, result.body);
-    } else {
-      ctx.response.body = '查無此人';
+  const user = await ctx.state.session.get('user');
+  if (user != null) {
+    const body = ctx.request.body();
+    if (body.type === "form") {
+      const pairs = await body.value;
+      const searchName = pairs.get('name');
+      const result = searchByName(searchName);
+      if (result) {
+        ctx.response.body = render.show(result.title, result.body);
+      } else {
+        ctx.response.body = '查無此人';
+      }
     }
+  } else {
+    ctx.response.body = render.fail();
   }
 }
 

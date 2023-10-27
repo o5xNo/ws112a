@@ -101,7 +101,7 @@ export function fail() {
   `)
 }
 
-export function list(posts) {
+export function list(posts, user) {
   let listItems = [];
   for (let post of posts) {
     listItems.push(`
@@ -116,7 +116,7 @@ export function list(posts) {
   <p>${(user == null) ? '<a href="/login">登入</a>以創建聯絡人！' : '歡迎' + user.username + '，您可以<a href="/post/new">新增聯絡</a>或<a href="/logout">查詢</a>！'}</p>
   <p>共有 <strong>${posts.length}</strong> 篇帖子！</p>
   <ul id="posts">
-    ${list.join('\n')}
+    ${listItems.join('\n')}
   </ul>
   `;
   return layout('Posts', content);
