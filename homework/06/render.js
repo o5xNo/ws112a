@@ -115,7 +115,7 @@ export function list(posts, user) {
   let content = `
   <h1>Posts</h1>
   <p>${(user==null)?'<a href="/login">登入</a>創建資料':'歡迎'+user.username+'，您可以 <a href="/post/new">創建資料</a> or <a href="/logout">登出</a> !'}</p>
-  <p>There are <strong>${posts.length}</strong> posts!</p>
+  <p>共有<strong>${posts.length}</strong>筆資料!</p>
   <ul id="posts">
     ${list.join('\n')}
   </ul>
