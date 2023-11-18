@@ -1,5 +1,7 @@
-import { Application, Router } from "https://deno.land/x/oak/mod.ts";
-import * as render from './render.js';
+import { Application, Router, send } from "https://deno.land/x/oak/mod.ts";
+
+const db = new DB("blog.db");
+db.query("CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, body TEXT)");
 
 const posts = [
   { id: 0, title: '孫悟空', body: '0909090909' },
