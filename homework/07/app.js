@@ -1,11 +1,14 @@
 import { Application, Router, send } from "https://deno.land/x/oak/mod.ts";
+import { DB } from "https://deno.land/x/sqlite/mod.ts";
+
+const app = new Application()
 
 const db = new DB("blog.db");
-db.query("CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, body TEXT)");
-
+db.query("CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, title TEXT, body TEXT)");
+db.query("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, email TEXT)");
 
 const posts = [
-  { id: 0, title: '孫悟空', body: '0909090909' },
+  { id: 0, title: '孫悟空', body: '0909090909' }, 
   { id: 1, title: '豬八戒', body: '0988888888' },
 ];
 
