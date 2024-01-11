@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>歷史紀錄</title>
+</head>
+<body>
+    <button onclick="goBack()">返回</button>
+
+    <div id="history-container">
+        <!-- 歷史紀錄的內容將在這裡顯示 -->
+    </div>
+
+    <script>
+        const diaries = JSON.parse(localStorage.getItem("diaries")) || [];
+        
+        diaries.forEach(diary => {
+            const historyContent = document.getElementById("history-container");
+
+            const diaryContainer = document.createElement("div");
+
+            const p = document.createElement("p");
+            p.innerHTML = `<strong>${diary.date}:</strong> ${diary.content}`;
+            diaryContainer.appendChild(p);
+
+            const editButton = document.createElement("button");
+            editButton.innerText = "修改";
+            editButton.addEventListener("click", () => editDiary(diary));
+            diaryContainer.appendChild(editButton);
+
+            const deleteButton = document.createElement("button");
+            deleteButton.innerText = "刪除";
+            deleteButton.addEventListener("click", () => deleteDiary(diary, diaryContainer));
+            diaryContainer.appendChild(deleteButton);
+
+            historyContent.appendChild(diaryContainer);
+        });
+
+        function editDiary(diary) {
+            const newContent = prompt("請輸入修改後的日記內容：", diary.content);
+            
+            if (newContent !== null) {
+                // 更新日記內容
+                diary.content = newContent;
+
+                // 更新本地存儲
+                localStorage.setItem("diaries", JSON.stringify(diaries));
+
+                // 刷新頁面，重新顯示更新後的日記列表
+                location.reload();
+            }
+        }
+
+        function deleteDiary(diary, container) {
+            const confirmDelete = confirm("確定要刪除這篇日記嗎？");
+
+            if (confirmDelete) {
+                // 在 diaries 數組中找到對應的日記索引，然後刪除
+                const index = diaries.findIndex(item => item === diary);
+                diaries.splice(index, 1);
+
+                // 更新本地存儲
+                localStorage.setItem("diaries", JSON.stringify(diaries));
+
+                // 從 DOM 中刪除相應的日記顯示容器
+                container.remove();
+            }
+        }
+
+        function goBack() {
+            // 使用 history.back() 返回上一個頁面
+            history.back();
+        }
+    </script>
+</body>
+</html>

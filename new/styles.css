@@ -1,0 +1,96 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+}
+
+#header {
+    text-align: left;
+    padding: 10px;
+}
+
+#header button {
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+#logout-btn {
+    margin-right: 10px;
+}
+
+#login-form, #signup-form, #diary {
+    max-width: 400px;
+    margin: 50px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+label {
+    margin-top: 10px;
+}
+
+input, textarea, button, select {
+    margin-top: 5px;
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+textarea {
+    height: 100px;
+    resize: none;
+}
+
+#diary-content, #diary-date {
+    margin-top: 10px;
+}
+
+#diary-date {
+    width: auto;
+}
+
+#diary-content {
+    height: 150px;
+}
+
+#diary button, #signup-form button {
+    margin-top: 10px;
+}
+
+#diary button, #signup-form button, #login-form button {
+    padding: 8px;
+    font-size: 16px;
+}
+
+#diary button:hover, #signup-form button:hover, #login-form button:hover {
+    background-color: #45a049;
+}
