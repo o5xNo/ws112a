@@ -138,7 +138,7 @@ export function newPost() {
     <form action="/post" method="post">
       <p><label for="postDate">選擇日期：</label>
       <input type="date" id="postDate" name="title" required></p>
-      <p><textarea placeholder="電話" name="body"></textarea></p>
+      <p><textarea placeholder="日記內文" name="body"></textarea></p>
       <p><input type="submit" value="新增"></p>
     </form>
   `);
